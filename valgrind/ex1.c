@@ -3,7 +3,7 @@
 void f(void){
   int* x = malloc(10 * sizeof(int));
   x[10] = 0;
-  //  free(x);
+  free(x);
 }             
 
 int main(void) {

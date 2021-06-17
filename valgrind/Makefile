@@ -4,7 +4,7 @@ CXX 		= g++ -fPIC
 CC		= gcc -fPIC
 
 # Passed to compiler
-OPT_LEVEL	= -O1
+OPT_LEVEL	= -O0
 DEBUG_LEVEL	= -g
 EXTRA_CCFLAGS	= 
 CXXFLAGS	= $(OPT_LEVEL) $(DEBUG_LEVEL) $(EXTRA_CCFLAGS) 
@@ -40,9 +40,16 @@ ex2_OBJS = $(ex2_SRCS:%.c=%.o)
 ex2_DEPS = $(ex2_SRCS:%.c=%.d) 
 #==================================================
 
-PROGRAM = $(ex1_PROGRAM) $(ex2_PROGRAM)
-OBJS = $(ex1_OBJS) $(ex2_OBJS)
-DEPS = $(ex1_DEPS) $(ex2_DEPS)
+#===== edit "ex3" to your binary name ===========
+ex3_PROGRAM=ex3
+ex3_SRCS = $(SRC_DIR)/ex3.c
+ex3_OBJS = $(ex3_SRCS:%.c=%.o) 
+ex3_DEPS = $(ex3_SRCS:%.c=%.d) 
+#==================================================
+
+PROGRAM = $(ex1_PROGRAM) $(ex2_PROGRAM) $(ex3_PROGRAM)
+OBJS = $(ex1_OBJS) $(ex2_OBJS) $(ex3_OBJS)
+DEPS = $(ex1_DEPS) $(ex2_DEPS) $(ex3_DEPS)
 
 all: $(PROGRAM)
 
@@ -52,6 +59,9 @@ $(ex1_PROGRAM): $(ex1_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $^
 
 $(ex2_PROGRAM): $(ex2_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $^
+
+$(ex3_PROGRAM): $(ex3_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $^
 
 .SUFFIXES: .c .o
