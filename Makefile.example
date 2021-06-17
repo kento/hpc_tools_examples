@@ -1,0 +1,75 @@
+# ==================== Variables ======================
+
+# MPI C++ compiler
+CXX 		= mpicc -fPIC
+CC		= $(CXX)
+
+# Passed to compiler
+OPT_LEVEL	= -O2
+DEBUG_LEVEL	= -g 
+EXTRA_CCFLAGS	=  -fopenmp -fno-inline -Wno-deprecated -std=c++11 # "-fno-omit-frame-pointer" will be automatically used due to -O0 and -g option
+CXXFLAGS	= $(OPT_LEVEL) $(DEBUG_LEVEL) $(EXTRA_CCFLAGS) 
+CFLAGS		= $(CXXFLAGS) 
+
+# Passed to the C pre-processor
+CPPFLAGS        = -I./ 
+
+# Passed to the linker
+LDFLAGS         = -L./
+
+# Link with these libraries
+LDLIBS          = -lstdc++ 
+
+# Installation path
+prefix		= 
+
+# =================================================
+
+SRC_DIR=.
+
+#===== edit "XXXXXX" to your binary name ===========
+XXXXXX_PROGRAM=XXXXXX
+XXXXXX_SRCS = $(SRC_DIR)/XXXXXX.c 
+XXXXXX_OBJS = $(XXXXXX_SRCS:%.c=%.o) 
+XXXXXX_DEPS = $(XXXXXX_SRCS:%.c=%.d) 
+XXXXXX_a_LIBS  = ./libXXXXXX.a 
+XXXXXX_so_LIBS = ./libXXXXXX.so  
+#===================================================
+
+PROGRAM = $(XXXXXX_PROGRAM)
+OBJS = $(XXXXXX_OBJS)
+DEPS = $(XXXXXX_DEPS)
+LIBS = $(XXXXXX_a_LIBS) $(XXXXXX_so_LIBS) 
+
+all: $(PROGRAM) $(LIBS)
+
+-include $(DEPS)
+
+$(XXXXXX_PROGRAM): $(XXXXXX_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $^
+
+$(XXXXXX_a_LIBS):  $(XXXXXX_OBJS)
+	ar cr  ./libXXXXXX.a $(XXXXXX_OBJS)
+	ranlib ./libXXXXXX.a
+
+$(XXXXXX_so_LIBS):  $(XXXXXX_OBJS)
+	$(CC) -shared -o ./libXXXXXX.so $(XXXXXX_OBJS)
+
+.SUFFIXES: .c .o
+.c.o: 
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c -MMD -MP $< 
+
+.SUFFIXES: .cpp .o
+.cpp.o:
+	$(CC) $(CXXFLAGS) $(CPPFLAGS) -o $@ -c -MMD -MP $<
+
+.PHONY: clean
+clean:
+	-rm -rf $(PROGRAM) $(OBJS) $(DEPS) $(LIBS)
+
+.PHONY: cleanx
+clean_core:
+	-rm -rf *.core
+
+
+
