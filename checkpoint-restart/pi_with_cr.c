@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     if (ret < 0) fprintf(stderr, "Error at read\n");
     ret = close(fd_count);
     if (ret < 0) fprintf(stderr, "Error at close\n");
-    printf("Restarted from iteration %d completed (count: %d)\n", restart_id, count);
+    printf("  Restarted from iteration %d completed (count: %d)\n", restart_id, count);
   }
   /* End: Restart Routine */
   
@@ -63,15 +63,14 @@ int main(int argc, char** argv) {
       if (ret < 0) fprintf(stderr, "Error at write\n");
       ret = close(fd_count);
       if (ret < 0) fprintf(stderr, "Error at close\n");
-      printf("Checkpoint at iteration %d completed (count: %d)\n", i, count);
+      printf("  Checkpoint at iteration %d completed (count: %d)\n", i, count);
     }
     /* End: Checkpoint Routine */
     x = (double)rand()/RAND_MAX;
     y = (double)rand()/RAND_MAX;
     s = x*x + y*y;
     if(s < 1) count++;
-    if (i % (n_sample / 10) == 0 ) printf("%i sampling done\n", i);
-
+    if (i % (n_sample / 10) == 0 ) printf("======= %i SAMPLING DONE ======= \n", i);
   }
   pi = (double)count / (n_sample) * 4;
   printf("%f\n", pi);

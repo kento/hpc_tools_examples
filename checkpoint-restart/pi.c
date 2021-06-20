@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     y = (double)rand()/RAND_MAX;
     s = x*x + y*y;
     if (s < 1) count++;
-    if (i % (n_sample / 10) == 0 ) printf("%i sampling done\n", i);
+    if (i % (n_sample / 10) == 0 ) printf("======= %i SAMPLING DONE ======= \n", i);
   }
   pi = (double)count / (n_sample) * 4;
   printf("%f\n", pi);

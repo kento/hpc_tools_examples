@@ -32,9 +32,10 @@ if [ $mode = "2" ]; then
     interval=$2
 fi
 
+
 for i in `seq 10`
 do
-    id=`ls -t  pi_count.*.ckpt | head -n 1 | cut -d "." -f 2`
+    id=`ls -t  pi_count.*.ckpt 2> /dev/null | head -n 1 | cut -d "." -f 2`
     if [ -z "$id" ]; then
 	# Without ckpt file
 	$command 0 $interval & 2> /dev/null
@@ -44,10 +45,10 @@ do
     fi
     proc=$!
     sleep 1
-    kill $proc
-    echo "Failure !!"
-#    echo $?
-#    if [ -z "$RES" ]; then
-#	exit
-#    fi
+    kill $proc 2> /dev/null
+    if [ $? == "1" ]; then
+	exit
+    fi
+    echo "<<<<<<< FAILURE !! >>>>>>>"
 done
+exit
