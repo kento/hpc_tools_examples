@@ -4,8 +4,9 @@
 
 int main(int argc, char** argv) {
   int i;
-  int count = 100;
-  int n_sample = 10000000;
+  int count = 0;
+//  int n_sample = 10000000;
+  int n_sample = 100;
   double pi;
   double x, y, s;
   
