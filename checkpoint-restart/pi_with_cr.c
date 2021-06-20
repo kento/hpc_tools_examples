@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pi.h>
 
 #define CKPT_PATH_FORMAT_i "./pi_i.%d.ckpt"
 #define CKPT_PATH_FORMAT_count "./pi_count.%d.ckpt"
@@ -22,8 +23,8 @@ int print_help() {
 
 int main(int argc, char** argv) {
   int i;
-  int count = 100;
-  int n_sample = 10000000;
+  int count = 0;
+  int n_sample = N_SAMPLE;
   double pi;
   double x, y, s;
   int restart_id;
@@ -69,6 +70,7 @@ int main(int argc, char** argv) {
     y = (double)rand()/RAND_MAX;
     s = x*x + y*y;
     if(s < 1) count++;
+    if (i % (n_sample / 10) == 0 ) printf("%i sampling done\n", i);
 
   }
   pi = (double)count / (n_sample) * 4;
