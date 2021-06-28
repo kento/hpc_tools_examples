@@ -33,15 +33,17 @@ if [ $mode = "2" ]; then
 fi
 
 
-for i in `seq 10`
+for i in `seq 100`
 do
     id=`ls -t  pi_count.*.ckpt 2> /dev/null | head -n 1 | cut -d "." -f 2`
     if [ -z "$id" ]; then
 	# Without ckpt file
 	$command 0 $interval & 2> /dev/null
+	disown %
     else
 	# with ckpt file
 	$command $id $interval & 2> /dev/null
+	disown %
     fi
     proc=$!
     sleep 1
