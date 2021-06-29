@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
       if (ret < 0) fprintf(stderr, "Error at write\n");
       ret = close(fd_count);
       if (ret < 0) fprintf(stderr, "Error at close\n");
-      printf("  Checkpoint at iteration %d completed (count: %d)\n", i, count);
+      //      printf("  Checkpoint at iteration %d completed (count: %d)\n", i, count);
     }
     /* End: Checkpoint Routine */
     x = (double)rand()/RAND_MAX;
