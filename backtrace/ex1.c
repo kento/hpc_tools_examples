@@ -8,10 +8,11 @@ void g(void)
 
 void f(void)
 {
+  int a;
   g();
 }             
 
-int main(void) {
+int main(int argc, char** argv) {
   f();
   return 0;
 }
