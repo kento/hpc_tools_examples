@@ -3,7 +3,7 @@
 void g(void)
 {
   int* x = NULL;
-  x[10] = 0;
+  *x = 0;
 }
 
 void f(void)
