@@ -32,20 +32,28 @@ pi_mpi_with_cr_PROGRAM=pi_mpi_with_cr
 pi_mpi_with_cr_SRCS = $(SRC_DIR)/pi_mpi_with_cr.c 
 pi_mpi_with_cr_OBJS = $(pi_mpi_with_cr_SRCS:%.c=%.o) 
 pi_mpi_with_cr_DEPS = $(pi_mpi_with_cr_SRCS:%.c=%.d) 
-#pi_mpi_with_cr_a_LIBS  = ./libpi_mpi_with_cr.a 
-#pi_mpi_with_cr_so_LIBS = ./libpi_mpi_with_cr.so  
 #===================================================
 
-PROGRAM = $(pi_mpi_with_cr_PROGRAM)
-OBJS = $(pi_mpi_with_cr_OBJS)
-DEPS = $(pi_mpi_with_cr_DEPS)
-#LIBS = $(pi_mpi_with_cr_a_LIBS) $(pi_mpi_with_cr_so_LIBS) 
+#===== edit "pi_mpi" to your binary name ===========
+pi_mpi_PROGRAM=pi_mpi
+pi_mpi_SRCS = $(SRC_DIR)/pi_mpi.c 
+pi_mpi_OBJS = $(pi_mpi_SRCS:%.c=%.o) 
+pi_mpi_DEPS = $(pi_mpi_SRCS:%.c=%.d) 
+#===================================================
+
+PROGRAM = $(pi_mpi_with_cr_PROGRAM) $(pi_mpi_PROGRAM)
+OBJS = $(pi_mpi_with_cr_OBJS) $(pi_mpi_OBJS)
+DEPS = $(pi_mpi_with_cr_DEPS) $(pi_mpi_DEPS)
+#LIBS = $(pi_mpi_with_cr_a_LIBS) $(pi_mpi_so_LIBS) 
 
 all: $(PROGRAM) $(LIBS)
 
 -include $(DEPS)
 
 $(pi_mpi_with_cr_PROGRAM): $(pi_mpi_with_cr_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $^
+
+$(pi_mpi_PROGRAM): $(pi_mpi_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $^
 
 .SUFFIXES: .c .o

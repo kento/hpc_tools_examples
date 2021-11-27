@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <../C/pi.h>
+#include <pi.h>
 #include <mpi.h>
 
 #define CKPT_PATH_FORMAT_i "./pi_i_%d.%d.ckpt"
