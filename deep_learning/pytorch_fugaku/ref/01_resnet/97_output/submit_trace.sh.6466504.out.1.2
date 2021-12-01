@@ -1,0 +1,73 @@
+---------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                         Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg    # of Calls  
+---------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  
+    aten::mkldnn_convolution_backward_weights        30.03%       37.019s        30.09%       37.091s      13.996ms          2650  
+      aten::mkldnn_convolution_backward_input        27.34%       33.699s        27.34%       33.699s      12.961ms          2600  
+                     aten::mkldnn_convolution        24.90%       30.697s        24.90%       30.697s      11.584ms          2650  
+             aten::native_batch_norm_backward         5.11%        6.298s         5.16%        6.359s       2.400ms          2650  
+                      aten::native_batch_norm         3.91%        4.817s         3.91%        4.817s       1.818ms          2650  
+                   aten::mkldnn_relu_backward         3.05%        3.761s         3.05%        3.761s       1.535ms          2450  
+                                   aten::add_         1.47%        1.811s         1.47%        1.811s     107.173us         16900  
+                                    aten::add         1.43%        1.768s         1.44%        1.779s     515.552us          3450  
+                                  aten::relu_         1.28%        1.581s         1.28%        1.581s     645.182us          2450  
+             aten::mkldnn_max_pool2d_backward         0.13%     162.751ms         0.13%     162.751ms       3.255ms            50  
+                                  aten::empty         0.13%     162.004ms         0.13%     162.004ms       9.939us         16300  
+                      NativeBatchNormBackward         0.10%     125.134ms         5.26%        6.485s       2.447ms          2650  
+                                  aten::fill_         0.10%     121.429ms         0.10%     121.429ms      14.808us          8200  
+            aten::mkldnn_convolution_backward         0.09%     116.519ms        57.52%       70.906s      26.757ms          2650  
+                      aten::mkldnn_max_pool2d         0.09%     116.383ms         0.09%     116.383ms       2.328ms            50  
+              torch::autograd::AccumulateGrad         0.08%      99.753ms         0.36%     441.041ms      54.788us          8050  
+                           aten::_convolution         0.07%      88.491ms        24.97%       30.786s      11.617ms          2650  
+                    MkldnnConvolutionBackward         0.07%      86.199ms        57.59%       70.992s      26.790ms          2650  
+                                  aten::zero_         0.06%      77.997ms         0.16%     199.163ms      24.437us          8150  
+    aten::mkldnn_adaptive_avg_pool2d_backward         0.06%      74.487ms         0.06%      74.487ms       1.490ms            50  
+                          aten::mkldnn_linear         0.05%      66.960ms         0.05%      66.960ms       1.339ms            50  
+                                ReluBackward1         0.04%      54.499ms         3.13%        3.859s       1.575ms          2450  
+         aten::mkldnn_linear_backward_weights         0.04%      51.118ms         0.04%      53.090ms       1.062ms            50  
+                                   aten::set_         0.04%      50.175ms         0.04%      50.175ms       6.233us          8050  
+                            aten::convolution         0.04%      46.599ms        25.01%       30.832s      11.635ms          2650  
+                 aten::_batch_norm_impl_index         0.04%      45.489ms         3.98%        4.912s       1.853ms          2650  
+                     aten::threshold_backward         0.03%      43.006ms         3.09%        3.804s       1.553ms          2450  
+           aten::mkldnn_linear_backward_input         0.03%      40.920ms         0.03%      40.920ms     818.397us            50  
+                             aten::batch_norm         0.03%      39.755ms         4.02%        4.951s       1.868ms          2650  
+                                 aten::conv2d         0.03%      38.479ms        25.04%       30.871s      11.649ms          2650  
+                            aten::as_strided_         0.03%      34.769ms         0.03%      34.769ms       4.293us          8100  
+             aten::mkldnn_adaptive_avg_pool2d         0.02%      22.959ms         0.02%      22.959ms     459.176us            50  
+                        aten::_mkldnn_reshape         0.01%       7.552ms         0.01%       7.552ms      75.523us           100  
+                               aten::to_dense         0.01%       6.417ms         0.01%       7.403ms     148.070us            50  
+                                      aten::t         0.00%       4.418ms         0.01%       8.492ms      28.305us           300  
+                                 AddBackward0         0.00%       3.377ms         0.00%       3.377ms       4.221us           800  
+                           aten::_log_softmax         0.00%       3.350ms         0.00%       3.767ms      75.349us            50  
+                              aten::to_mkldnn         0.00%       3.151ms         0.00%       3.231ms      64.620us            50  
+             aten::_log_softmax_backward_data         0.00%       3.096ms         0.00%       3.512ms      70.232us            50  
+                       aten::nll_loss_forward         0.00%       2.875ms         0.00%       3.608ms      72.168us            50  
+                              aten::transpose         0.00%       2.631ms         0.00%       4.074ms      13.579us           300  
+                                  aten::addmm         0.00%       2.591ms         0.06%      70.167ms       1.403ms            50  
+                                AddmmBackward         0.00%       2.466ms         0.08%     101.189ms       2.024ms            50  
+                      aten::nll_loss_backward         0.00%       1.640ms         0.00%       5.793ms     115.869us            50  
+                      MkldnnMaxPool2DBackward         0.00%       1.605ms         0.13%     164.356ms       3.287ms            50  
+                             aten::as_strided         0.00%       1.442ms         0.00%       1.442ms       4.808us           300  
+              MkldnnAdaptiveAvgPool2DBackward         0.00%     931.006us         0.06%      75.418ms       1.508ms            50  
+                              NllLossBackward         0.00%     923.986us         0.01%       6.717ms     134.349us            50  
+                             aten::empty_like         0.00%     880.935us         0.00%       1.461ms      14.605us           100  
+                                aten::reshape         0.00%     859.947us         0.01%       8.412ms      84.123us           100  
+                              aten::ones_like         0.00%     662.224us         0.00%       1.709ms      34.187us            50  
+                        MkldnnReshapeBackward         0.00%     636.558us         0.00%       2.249ms      44.970us            50  
+                                aten::flatten         0.00%     634.835us         0.01%       7.435ms     148.703us            50  
+                           LogSoftmaxBackward         0.00%     618.268us         0.00%       4.130ms      82.598us            50  
+                             aten::max_pool2d         0.00%     607.127us         0.09%     116.990ms       2.340ms            50  
+                              ToDenseBackward         0.00%     567.134us         0.00%       4.110ms      82.193us            50  
+                            aten::log_softmax         0.00%     516.529us         0.00%       4.284ms      85.679us            50  
+                             aten::zeros_like         0.00%     494.220us         0.00%       2.780ms      55.595us            50  
+                             aten::contiguous         0.00%     470.049us         0.00%     470.049us       1.567us           300  
+                    aten::adaptive_avg_pool2d         0.00%     458.879us         0.02%      23.418ms     468.353us            50  
+                               aten::nll_loss         0.00%     440.088us         0.00%       4.049ms      80.970us            50  
+                                aten::resize_         0.00%     398.235us         0.00%     398.235us       2.655us           150  
+                             aten::resize_as_         0.00%     344.060us         0.00%     426.250us       8.525us            50  
+                      aten::to_dense_backward         0.00%     311.479us         0.00%       3.543ms      70.850us            50  
+                          aten::empty_strided         0.00%     291.559us         0.00%     291.559us       5.831us            50  
+                                    TBackward         0.00%     289.509us         0.00%       1.421ms      28.428us            50  
+                   torch::autograd::GraphRoot         0.00%     116.050us         0.00%     116.050us       2.321us            50  
+---------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 123.276s
+

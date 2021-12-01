@@ -1,0 +1,31 @@
+>> script option: Namespace(batch=256, itr=20, lr=0.001, momentum=0.9, trace=False, type='cpu_mkltensor', weight_decay=0.0)
+## Start Training
+[    1] loss: 7.352 time: 2.603 s
+[    2] loss: 5.136 time: 2.236 s
+[    3] loss: 1.292 time: 2.210 s
+[    4] loss: 0.013 time: 2.210 s
+[    5] loss: 0.000 time: 2.210 s
+[    6] loss: 0.000 time: 2.210 s
+[    7] loss: 0.000 time: 2.211 s
+[    8] loss: 0.000 time: 2.212 s
+[    9] loss: 0.000 time: 2.212 s
+[   10] loss: 0.000 time: 2.212 s
+[   11] loss: 0.000 time: 2.211 s
+[   12] loss: 0.000 time: 2.212 s
+[   13] loss: 0.000 time: 2.211 s
+[   14] loss: 0.000 time: 2.212 s
+[   15] loss: 0.000 time: 2.211 s
+[   16] loss: 0.000 time: 2.212 s
+[   17] loss: 0.000 time: 2.212 s
+[   18] loss: 0.000 time: 2.212 s
+[   19] loss: 0.000 time: 2.212 s
+[   20] loss: 0.000 time: 2.212 s
+count    19.000000
+mean      2.212732
+std       0.005760
+min       2.209876
+25%       2.211007
+50%       2.211666
+75%       2.212218
+max       2.236256
+dtype: float64

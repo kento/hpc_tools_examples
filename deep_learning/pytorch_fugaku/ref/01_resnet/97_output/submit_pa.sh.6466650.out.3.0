@@ -1,0 +1,12 @@
+Model: resnet50
+Batch size: 75
+Number of CPUs: 4
+Running warmup...
+Running benchmark...
+Iter #0: 28.8 img/sec per CPU
+Iter #1: 28.8 img/sec per CPU
+Iter #2: 28.7 img/sec per CPU
+Iter #3: 28.7 img/sec per CPU
+Iter #4: 28.7 img/sec per CPU
+Img/sec per CPU: 28.7 +-0.0
+Total img/sec on 4 CPU(s): 115.0 +-0.2
