@@ -34,7 +34,24 @@ class Net1(nn.Module):
                 #return nn.Softmax(dim=0)(x)
                 return x
 
-        
+class NeuralNetwork(nn.Module):
+        def __init__(self):
+                super(NeuralNetwork, self).__init__()
+                self.flatten = nn.Flatten()
+                self.linear_relu_stack = nn.Sequential(
+                        nn.Linear(28*28, 512),
+                        nn.ReLU(),
+                        nn.Linear(512, 512),
+                        nn.ReLU(),
+                        nn.Linear(512, 10),
+                )
+                
+        def forward(self, x):
+                x = self.flatten(x)
+                logits = self.linear_relu_stack(x)
+                return logits
+                                                                        
+                                                                        
 training_data = datasets.FashionMNIST(
     root="data",
     train=True,
@@ -52,7 +69,8 @@ test_data = datasets.FashionMNIST(
 train_dataloader = DataLoader(training_data, batch_size=64)
 test_dataloader = DataLoader(test_data, batch_size=64)
 
-model = Net1()
+#model = Net1()
+model = NeuralNetwork()
 
 ##############################################
 # Hyperparameters
