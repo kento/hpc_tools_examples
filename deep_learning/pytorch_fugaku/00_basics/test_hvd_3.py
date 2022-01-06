@@ -1,6 +1,8 @@
 #!/bin/env python
 
 import sys
+import time
+sl = time.time()
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -9,12 +11,15 @@ from torchvision import datasets
 from torchvision.transforms import ToTensor
 from torch.utils.data import Dataset
 import horovod.torch as hvd
+el = time.time()
+
+si = time.time()
 
 learning_rate = 1e-3
 batch_size = 64
 epochs = 1
 
-torch.set_num_threads(12)
+torch.set_num_threads(48)
 
 class Net1(nn.Module):
         def __init__(self):
@@ -34,7 +39,7 @@ class Net1(nn.Module):
 hvd.init()
 print(f"hvd.init() done:  {hvd.rank()} / {hvd.size()}", flush=True)
 
-train_dataset = datasets.MNIST(root="../data", train=True, download=True, transform=ToTensor())
+train_dataset = datasets.FakeData(size=60000, image_size=(1, 28, 28), transform=ToTensor())
 train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, num_replicas=hvd.size(), rank=hvd.rank())
 if hvd.rank() == 0: print(f"sampler init done !", flush=True)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler)
@@ -53,6 +58,9 @@ if hvd.rank() == 0: print(f"optimizer init done !", flush=True);
 hvd.broadcast_parameters(model.state_dict(), root_rank=0)
 if hvd.rank() == 0: print(f"bcast param done !", flush=True);
 
+ei = time.time()
+
+st = time.time()
 for epoch in range(epochs):
     for batch_idx, (data, target) in enumerate(train_loader):
         optimizer.zero_grad()
@@ -64,4 +72,5 @@ for epoch in range(epochs):
             print('Train Epoch: {} [{}/{}]\tLoss: {}'.format(
                     epoch, batch_idx * len(data), len(train_sampler), loss.item()), flush=True)
 
-
+et = time.time()
+if hvd.rank() == 0: print(f"Time: {et-sl} ({el-sl} {ei-si} {et-st})")
