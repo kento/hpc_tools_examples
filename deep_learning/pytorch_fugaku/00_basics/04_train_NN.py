@@ -1,11 +1,4 @@
 #!/bin/env python
-#################################################################
-# Further Reading
-# -----------------------
-# - `Loss Functions <https://pytorch.org/docs/stable/nn.html#loss-functions>`_
-# - `torch.optim <https://pytorch.org/docs/stable/optim.html>`_
-# - `Warmstart Training a Model <https://pytorch.org/tutorials/recipes/recipes/warmstarting_model_using_parameters_from_a_different_model.html>`_
-#
 
 import os
 import torch
@@ -14,52 +7,29 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchvision.transforms import ToTensor
-
-#import torch
-#from torch import nn
-#from torch.utils.data import DataLoader
-#from torchvision import datasets
-#from torchvision.transforms import ToTensor, Lambda
-
+       
 class Net1(nn.Module):
         def __init__(self):
                 super(Net1, self).__init__()
+                self.flatten = nn.Flatten()
                 self.fc1 = nn.Linear(28 * 28, 1000)
                 self.fc2 = nn.Linear(1000, 10)
 
         def forward(self, x):
+                x = self.flatten(x)
                 x = self.fc1(x)
                 x = F.relu(x)
                 x = self.fc2(x)
-                #return nn.Softmax(dim=0)(x)
                 return x
 
-class NeuralNetwork(nn.Module):
-        def __init__(self):
-                super(NeuralNetwork, self).__init__()
-                self.flatten = nn.Flatten()
-                self.linear_relu_stack = nn.Sequential(
-                        nn.Linear(28*28, 512),
-                        nn.ReLU(),
-                        nn.Linear(512, 512),
-                        nn.ReLU(),
-                        nn.Linear(512, 10),
-                )
-                
-        def forward(self, x):
-                x = self.flatten(x)
-                logits = self.linear_relu_stack(x)
-                return logits
-                                                                        
-                                                                        
-training_data = datasets.FashionMNIST(
+training_data = datasets.MNIST(
     root="data",
     train=True,
     download=True,
     transform=ToTensor()
 )
 
-test_data = datasets.FashionMNIST(
+test_data = datasets.MNIST(
     root="data",
     train=False,
     download=True,
@@ -69,8 +39,7 @@ test_data = datasets.FashionMNIST(
 train_dataloader = DataLoader(training_data, batch_size=64)
 test_dataloader = DataLoader(test_data, batch_size=64)
 
-#model = Net1()
-model = NeuralNetwork()
+model = Net1()
 
 ##############################################
 # Hyperparameters
@@ -138,7 +107,6 @@ def test_loop(dataloader, model, loss_fn):
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-epochs = 10
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
