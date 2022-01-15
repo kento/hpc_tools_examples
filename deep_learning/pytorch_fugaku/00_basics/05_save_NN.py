@@ -104,6 +104,10 @@ for t in range(epochs):
     test_loop(test_dataloader, model, loss_fn)
 print("Training Done!")
 
+# Saving model
+torch.save(model.state_dict(), "Net1_weights.pth")
+print("Saving Done!")
+
 
 
                         

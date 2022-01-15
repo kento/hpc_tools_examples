@@ -7,6 +7,17 @@ from torchvision import datasets
 from torchvision.transforms import ToTensor
 from torch import nn
 from torch.nn import functional as F
+import horovod.torch as hvd
+
+
+
+
+hvd.init()
+
+learning_rate = 1e-3
+batch_size = int(64 / hvd.size())
+epochs = 1
+torch.set_num_threads(4)
 
 training_data = datasets.MNIST(
         root="../data",
@@ -22,16 +33,11 @@ test_data = datasets.MNIST(
         transform=ToTensor()
     )
 
-train_dataloader = DataLoader(dataset=training_data, batch_size=64, shuffle=True)
-test_dataloader = DataLoader(dataset=test_data, batch_size=64, shuffle=True)
+train_sampler = torch.utils.data.distributed.DistributedSampler(training_data, num_replicas=hvd.size(), rank=hvd.rank())
+test_sampler  = torch.utils.data.distributed.DistributedSampler(test_data, num_replicas=hvd.size(), rank=hvd.rank()) 
 
-# Display image and label.
-train_features, train_labels = next(iter(train_dataloader))
-print(f"Feature batch shape: {train_features.size()}")
-print(f"Labels batch shape: {train_labels.size()}")
-img = train_features[0]
-label = train_labels[0]
-print(f"Label class: {label}")
+train_dataloader = DataLoader(dataset=training_data, batch_size=batch_size, sampler=train_sampler)
+test_dataloader = DataLoader(dataset=test_data, batch_size=batch_size, sampler=test_sampler)
 
 class Net1(nn.Module):
         def __init__(self):
@@ -48,26 +54,21 @@ class Net1(nn.Module):
                 return x
 
 model = Net1()
-print(model)
-logits = model(img)
-pred_probab = nn.Softmax(dim=1)(logits)
-img_pred = pred_probab.argmax(1)
-print(f"Predicted class: {img_pred}")
 
 # Training
-learning_rate = 1e-3
-batch_size = 64
-epochs = 1
 
 # Initialize the loss function
 loss_fn = nn.CrossEntropyLoss()
 
 # We initialize the optimizer by registering the model's parameters that need to be trained, and passing in the learning rate hyperparameter
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=model.named_parameters()) 
+
+hvd.broadcast_parameters(model.state_dict(), root_rank=0) 
 
 # evaluates the model's performance against our test data.
 def train_loop(dataloader, model, loss_fn, optimizer):
-    size = len(dataloader.dataset)
+    size = len(train_sampler)
     for batch, (X, y) in enumerate(dataloader):
         # Compute prediction and loss
         pred = model(X)
@@ -80,11 +81,11 @@ def train_loop(dataloader, model, loss_fn, optimizer):
 
         if batch % 100 == 0:
             loss, current = loss.item(), batch * len(X)
-            print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+            if hvd.rank() == 0: print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]", flush=True)
 
 
 def test_loop(dataloader, model, loss_fn):
-    size = len(dataloader.dataset)
+    size = len(train_sampler)
     num_batches = len(dataloader)
     test_loss, correct = 0, 0
 
@@ -96,13 +97,17 @@ def test_loop(dataloader, model, loss_fn):
 
     test_loss /= num_batches
     correct /= size
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    if hvd.rank() == 0: print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n", flush=True)
 
 for t in range(epochs):
-    print(f"Epoch {t+1}\n-------------------------------")
+    if hvd.rank() == 0: print(f"Epoch {t+1}\n-------------------------------", flush=True)
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
-print("Training Done!")
+if hvd.rank() == 0: print("Training Done!")
+
+# Saving model
+torch.save(model.state_dict(), "Net1_weights.pth")
+if hvd.rank() == 0: print("Saving Done!")
 
 
 

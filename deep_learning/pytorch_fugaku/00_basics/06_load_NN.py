@@ -49,6 +49,12 @@ class Net1(nn.Module):
 
 model = Net1()
 print(model)
+
+# Load Model
+model.load_state_dict(torch.load('Net1_weights.pth'))
+model.eval()
+print("Loading model Done !")
+
 logits = model(img)
 pred_probab = nn.Softmax(dim=1)(logits)
 img_pred = pred_probab.argmax(1)
