@@ -14,7 +14,7 @@ hvd.init()
 learning_rate = 1e-3
 batch_size = int(64 / hvd.size())
 epochs = 1
-torch.set_num_threads(4)
+torch.set_num_threads(6)
 
 training_data = datasets.MNIST(
         root="../data",
@@ -65,7 +65,7 @@ hvd.broadcast_parameters(model.state_dict(), root_rank=0)
 
 # evaluates the model's performance against our test data.
 def train_loop(dataloader, model, loss_fn, optimizer):
-    size = len(train_sampler)
+    size = len(dataloader.dataset)
     for batch, (X, y) in enumerate(dataloader):
         # Compute prediction and loss
         pred = model(X)
@@ -78,11 +78,12 @@ def train_loop(dataloader, model, loss_fn, optimizer):
 
         if batch % 100 == 0:
             loss, current = loss.item(), batch * len(X)
+            current = current * hvd.size()
             if hvd.rank() == 0: print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]", flush=True)
 
 
 def test_loop(dataloader, model, loss_fn):
-    size = len(test_sampler)
+    size = len(dataloader.sampler)
     num_batches = len(dataloader)
     test_loss, correct = 0, 0
 
