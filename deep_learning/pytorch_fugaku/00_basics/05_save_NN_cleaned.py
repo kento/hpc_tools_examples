@@ -29,14 +29,6 @@ test_data = datasets.MNIST(
 train_dataloader = DataLoader(dataset=training_data, batch_size=batch_size, shuffle=True)
 test_dataloader = DataLoader(dataset=test_data, batch_size=batch_size, shuffle=True)
 
-# Display image and label.
-train_features, train_labels = next(iter(train_dataloader))
-print(f"Feature batch shape: {train_features.size()}")
-print(f"Labels batch shape: {train_labels.size()}")
-img = train_features[0]
-label = train_labels[0]
-print(f"Label class: {label}")
-
 class Net1(nn.Module):
         def __init__(self):
                 super(Net1, self).__init__()
@@ -52,11 +44,6 @@ class Net1(nn.Module):
                 return x
 
 model = Net1()
-print(model)
-logits = model(img)
-pred_probab = nn.Softmax(dim=1)(logits)
-img_pred = pred_probab.argmax(1)
-print(f"Predicted class: {img_pred}")
 
 # Training
 
@@ -104,6 +91,10 @@ for t in range(epochs):
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
 print("Training Done!")
+
+# Saving model
+torch.save(model.state_dict(), "Net1_weights.pth")
+print("Saving Done!")
 
 
 

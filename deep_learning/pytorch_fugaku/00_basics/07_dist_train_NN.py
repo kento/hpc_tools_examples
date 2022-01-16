@@ -9,9 +9,6 @@ from torch import nn
 from torch.nn import functional as F
 import horovod.torch as hvd
 
-
-
-
 hvd.init()
 
 learning_rate = 1e-3
@@ -85,7 +82,7 @@ def train_loop(dataloader, model, loss_fn, optimizer):
 
 
 def test_loop(dataloader, model, loss_fn):
-    size = len(train_sampler)
+    size = len(test_sampler)
     num_batches = len(dataloader)
     test_loss, correct = 0, 0
 

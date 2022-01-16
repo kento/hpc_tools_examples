@@ -8,6 +8,11 @@ from torchvision.transforms import ToTensor
 from torch import nn
 from torch.nn import functional as F
 
+# Training
+learning_rate = 1e-3
+batch_size = 64
+epochs = 1
+
 training_data = datasets.MNIST(
         root="../data",
         train=True,
@@ -25,14 +30,6 @@ test_data = datasets.MNIST(
 train_dataloader = DataLoader(dataset=training_data, batch_size=64, shuffle=True)
 test_dataloader = DataLoader(dataset=test_data, batch_size=64, shuffle=True)
 
-# Display image and label.
-train_features, train_labels = next(iter(train_dataloader))
-print(f"Feature batch shape: {train_features.size()}")
-print(f"Labels batch shape: {train_labels.size()}")
-img = train_features[0]
-label = train_labels[0]
-print(f"Label class: {label}")
-
 class Net1(nn.Module):
         def __init__(self):
                 super(Net1, self).__init__()
@@ -48,16 +45,6 @@ class Net1(nn.Module):
                 return x
 
 model = Net1()
-print(model)
-logits = model(img)
-pred_probab = nn.Softmax(dim=1)(logits)
-img_pred = pred_probab.argmax(1)
-print(f"Predicted class: {img_pred}")
-
-# Training
-learning_rate = 1e-3
-batch_size = 64
-epochs = 1
 
 # Initialize the loss function
 loss_fn = nn.CrossEntropyLoss()
