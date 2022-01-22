@@ -8,13 +8,14 @@ from torchvision.transforms import ToTensor
 from torch import nn
 from torch.nn import functional as F
 import horovod.torch as hvd
+import time
 
 hvd.init()
 
 learning_rate = 1e-3
-batch_size = int(64 / hvd.size())
+batch_size = 64
 epochs = 1
-torch.set_num_threads(6)
+torch.set_num_threads(2)
 
 training_data = datasets.MNIST(
         root="../data",
@@ -58,7 +59,7 @@ model = Net1()
 loss_fn = nn.CrossEntropyLoss()
 
 # We initialize the optimizer by registering the model's parameters that need to be trained, and passing in the learning rate hyperparameter
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate * hvd.size())
 optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=model.named_parameters()) 
 
 hvd.broadcast_parameters(model.state_dict(), root_rank=0) 
@@ -78,8 +79,7 @@ def train_loop(dataloader, model, loss_fn, optimizer):
 
         if batch % 100 == 0:
             loss, current = loss.item(), batch * len(X)
-            current = current * hvd.size()
-            if hvd.rank() == 0: print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]", flush=True)
+            if hvd.rank() == 0: print(f"loss: {loss:>7f}  [{current:>5d}/{len(train_sampler):>5d}]", flush=True)
 
 
 def test_loop(dataloader, model, loss_fn):
@@ -97,11 +97,14 @@ def test_loop(dataloader, model, loss_fn):
     correct /= size
     if hvd.rank() == 0: print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n", flush=True)
 
+s = time.time()    
 for t in range(epochs):
     if hvd.rank() == 0: print(f"Epoch {t+1}\n-------------------------------", flush=True)
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
-if hvd.rank() == 0: print("Training Done!")
+e = time.time()    
+if hvd.rank() == 0: print(f"Training Done! training time = {e-s:>2f}")
+
 
 # Saving model
 torch.save(model.state_dict(), "Net1_weights.pth")
