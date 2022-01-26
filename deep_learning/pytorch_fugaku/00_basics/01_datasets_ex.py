@@ -18,3 +18,4 @@ test_data = datasets.MNIST(
         download=True,
         transform=ToTensor()
     )
+
