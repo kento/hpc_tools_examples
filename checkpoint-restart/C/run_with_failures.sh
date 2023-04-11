@@ -39,7 +39,9 @@ do
     if [ -z "$id" ]; then
 	# Without ckpt file
 	$command 0 $interval & 2> /dev/null
-	disown %
+	# "disown" detaches background processes. "%" is the last launched background process
+	# use "disown" commands to just avoid error messagees to be displayed on the terminal
+	disown %  
     else
 	# with ckpt file
 	$command $id $interval & 2> /dev/null
