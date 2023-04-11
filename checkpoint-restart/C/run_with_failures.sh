@@ -47,7 +47,7 @@ do
 	$command $id $interval & 2> /dev/null
 	disown %
     fi
-    proc=$!
+    proc=$! #$! is process ID of the last background process
     sleep 1
     kill $proc 2> /dev/null
     if [ $? == "1" ]; then
