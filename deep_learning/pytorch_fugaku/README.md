@@ -1,3 +1,3 @@
-[!['altテキスト']('サムネイル画像のURL')]('https://youtu.be/jgtmtq5Bui8')
+[!['test']('test')]('https://youtu.be/jgtmtq5Bui8')
 
 
